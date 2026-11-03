@@ -24,7 +24,6 @@ let blogs = [];
 // retrieve blogs
 app.get("/blogs", async (req, res) => {
     const result = await db.query("SELECT * FROM blogs ORDER BY blog_id DESC;");
-    // posts = result.rows;
     blogs = result.rows;
     // convert time
     for (let i = 0; i < blogs.length; ++i) {
@@ -42,28 +41,6 @@ app.get("/blogs", async (req, res) => {
       blogs[i].date_created = formatted; 
     }
     res.json(blogs);
-});
-
-
-// post blog
-app.post("/blogs", (req, res) => {
-  const { title, content } = req.body;
-
-  if (!title || !content) {
-    return res.status(400).json({
-      message: "Title and content are required",
-    });
-  }
-
-  const newBlog = {
-    id: Date.now(),
-    title,
-    content,
-  };
-
-  blogs.push(newBlog);
-
-  res.status(201).json(newBlog);
 });
 
 app.listen(PORT, () => {
